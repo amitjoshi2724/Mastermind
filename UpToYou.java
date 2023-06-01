@@ -89,7 +89,8 @@ class Panel16 extends JPanel {
                 + "but in the wrong location. If a<br>color is repeated in the answer,<br>"
                 + "and a player selects that color, that color is only counted once<br>"
                 + "by the pegs, or feedback from the computer<br>"
-                + "You have ten tries to guess the correct sequence.</html>";
+                + "You have ten tries to guess the correct sequence<br>"
+                + "Credits: Developed by Amit Joshi. Github: @amitjoshi24</html>";
 
         instructions = new ScrollableLabel(instructionsText);
 
