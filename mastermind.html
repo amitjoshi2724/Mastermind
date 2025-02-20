@@ -35,6 +35,19 @@
             background-color: rgb(210, 210, 220);
             border: 1px solid black;
             color: rgb(128, 128, 128);
+            cursor: pointer;
+        }
+
+        #undo-button:disabled {
+            background-color: #e0e0e0;
+            color: #a0a0a0;
+            cursor: not-allowed;
+            border: 1px solid #a0a0a0;
+        }
+
+        #undo-button:not(:disabled) {
+            background-color: #ffffff;
+            color: #000000;
         }
 
         #color-buttons {
@@ -113,6 +126,11 @@
         .check-button {
             padding: 5px 10px;
             margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .check-button:disabled {
+            cursor: not-allowed;
         }
 
         /* Feedback Pegs */
@@ -281,7 +299,10 @@
             checkBtn.className = 'check-button';
             checkBtn.textContent = 'Check';
             checkBtn.disabled = true;
-            checkBtn.onclick = () => checkGuess(rowIndex);
+            checkBtn.onclick = () => {
+                checkGuess(rowIndex);
+                checkBtn.disabled = true; // Disable after checking
+            };
             row.appendChild(checkBtn);
 
             // Create feedback pegs
@@ -303,14 +324,15 @@
                 if (!gameActive) return;
                 
                 const currentRowElement = document.getElementsByClassName('game-row')[1 + (maxRows - 1 - currentRow)];
+                const checkBtn = currentRowElement.querySelector('.check-button');
+                
                 if (currentGuess.length < 4) {
                     currentGuess.push(colors[index]);
                     currentRowElement.children[currentGuess.length - 1].style.backgroundColor = colors[index];
                     document.getElementById('undo-button').disabled = false;
-                }
-                
-                if (currentGuess.length === 4) {
-                    currentRowElement.querySelector('.check-button').disabled = false;
+                    
+                    // Enable check button only if we have 4 colors
+                    checkBtn.disabled = currentGuess.length !== 4;
                 }
             };
         });
@@ -319,12 +341,16 @@
         document.getElementById('undo-button').onclick = () => {
             if (currentGuess.length > 0) {
                 const currentRowElement = document.getElementsByClassName('game-row')[1 + (maxRows - 1 - currentRow)];
+                const checkBtn = currentRowElement.querySelector('.check-button');
+                
                 currentRowElement.children[currentGuess.length - 1].style.backgroundColor = '#d2d2dc';
                 currentGuess.pop();
-                currentRowElement.querySelector('.check-button').disabled = true;
-                if (currentGuess.length === 0) {
-                    document.getElementById('undo-button').disabled = true;
-                }
+                
+                // Disable check button since we now have fewer than 4 colors
+                checkBtn.disabled = true;
+                
+                // Disable undo button if no colors left
+                document.getElementById('undo-button').disabled = currentGuess.length === 0;
             }
         };
 
