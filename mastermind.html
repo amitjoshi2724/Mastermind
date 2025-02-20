@@ -26,12 +26,13 @@
             width: 400px;
             display: flex;
             flex-direction: column;
+            gap: 20px;
         }
 
         #undo-button {
             font-size: 80px;
             padding: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 0;
             background-color: rgb(210, 210, 220);
             border: 1px solid black;
             color: rgb(128, 128, 128);
@@ -56,6 +57,7 @@
             grid-template-rows: repeat(3, 1fr);
             gap: 0;
             height: 400px;
+            flex-shrink: 0;
         }
 
         .button-cell {
@@ -66,6 +68,8 @@
             justify-content: center;
             align-items: center;
             transition: border 0.1s;
+            cursor: pointer;
+            aspect-ratio: 1;
         }
 
         .button-cell:hover {
@@ -78,7 +82,7 @@
             height: 60px;
             border-radius: 50%;
             border: 2px solid black;
-            cursor: pointer;
+            pointer-events: none;
         }
 
         .color-btn:hover {
@@ -106,11 +110,14 @@
             align-items: center;
             margin-bottom: 10px;
             gap: 10px;
+            height: 60px;
         }
 
         .hole {
             width: 50px;
             height: 50px;
+            min-width: 50px;
+            min-height: 50px;
             border-radius: 50%;
             border: 2px solid black;
             background-color: #d2d2dc;
@@ -123,10 +130,22 @@
             font-size: 24px;
         }
 
+        .sequence-label {
+            width: 120px;
+            margin-left: 10px;
+        }
+
+        .mastermind-label {
+            width: 120px;
+            margin-left: 10px;
+            text-align: center;
+        }
+
         .check-button {
             padding: 5px 10px;
-            margin-left: 10px;
+            margin-left: auto;
             cursor: pointer;
+            width: 80px;
         }
 
         .check-button:disabled {
@@ -138,10 +157,11 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 5px;
-            margin-left: 10px;
+            margin: 0 10px;
             padding: 5px;
             border: 1px solid black;
             width: 50px;
+            height: 50px;
         }
 
         .peg {
@@ -167,14 +187,29 @@
             background-color: rgb(210, 210, 220);
         }
 
-        #reset-button {
-            font-size: 80px;
-            padding: 20px;
+        /* Add a container for mastermind label and feedback to keep them aligned */
+        .feedback-column {
+            width: 120px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Add styles for reset button */
+        .reset-button {
+            font-size: 40px;
+            padding: 10px;
             margin-top: 20px;
-            width: 100%;
+            width: 50%;
+            align-self: center;
             background-color: rgb(210, 210, 220);
             border: 1px solid black;
             color: rgb(128, 128, 128);
+            cursor: pointer;
+        }
+
+        .reset-button:hover {
+            background-color: #ffffff;
+            color: #000000;
         }
     </style>
 	</head>
@@ -203,7 +238,7 @@
                     <button class="color-btn" style="background-color: magenta"></button>
                 </div>
             </div>
-            <button id="reset-button">End</button>
+            <button class="reset-button" onclick="initGame()">Reset Game</button>
         </div>
 
         <!-- Game Board -->
@@ -214,8 +249,8 @@
                 <div class="hole"></div>
                 <div class="hole"></div>
                 <div class="hole"></div>
-                <div>Correct Sequence</div>
-                <div>Mastermind</div>
+                <div class="sequence-label">Correct Sequence</div>
+                <div class="mastermind-label">Mastermind</div>
             </div>
         </div>
 
@@ -301,10 +336,14 @@
             checkBtn.disabled = true;
             checkBtn.onclick = () => {
                 checkGuess(rowIndex);
-                checkBtn.disabled = true; // Disable after checking
+                checkBtn.disabled = true;
             };
             row.appendChild(checkBtn);
 
+            // Create feedback container
+            const feedbackColumn = document.createElement('div');
+            feedbackColumn.className = 'feedback-column';
+            
             // Create feedback pegs
             const feedback = document.createElement('div');
             feedback.className = 'feedback';
@@ -313,14 +352,15 @@
                 peg.className = 'peg';
                 feedback.appendChild(peg);
             }
-            row.appendChild(feedback);
+            feedbackColumn.appendChild(feedback);
+            row.appendChild(feedbackColumn);
 
             document.getElementById('hole-board').appendChild(row);
         }
 
         // Update color selection handlers
-        document.querySelectorAll('.color-btn').forEach((btn, index) => {
-            btn.onclick = () => {
+        document.querySelectorAll('.button-cell').forEach((cell, index) => {
+            cell.onclick = () => {
                 if (!gameActive) return;
                 
                 const currentRowElement = document.getElementsByClassName('game-row')[1 + (maxRows - 1 - currentRow)];
@@ -453,13 +493,6 @@
                 btn.disabled = !enabled;
             });
         }
-
-        // Add reset button
-        const resetBtn = document.createElement('button');
-        resetBtn.textContent = 'Reset Game';
-        resetBtn.style.marginTop = '10px';
-        resetBtn.onclick = initGame;
-        document.getElementById('button-board').appendChild(resetBtn);
 
         // Initialize the game
         initGame();
