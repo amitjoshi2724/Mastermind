@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mastermind Game</title>
     <style>
+        /* Global box-sizing so that padding and border are included in width/height */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f5;
@@ -12,26 +17,30 @@
             padding: 2vh;
         }
 
+        /* The game container now uses percentages for its children.
+           On larger screens the panels are side-by-side; on smaller screens they stack. */
         #game-container {
             display: flex;
             justify-content: center;
-            gap: 0;
-            min-height: 100vh;  /* Take at least full viewport height */
+            align-items: stretch;
+            min-height: 100vh;
+            width: 100%;
         }
 
-        /* Color Selection Panel */
+        /* Left Panel – Color Selection Panel */
         #button-board {
             background-color: rgb(210, 210, 220);
             padding: 2vh;
             border: 0.1rem solid black;
-            width: 25vw;
+            width: 30%;
             display: flex;
             flex-direction: column;
             gap: 2vh;
         }
 
+        /* Undo button styling remains similar but with relative units */
         #undo-button {
-            font-size: 5rem;
+            font-size: clamp(3rem, 5vw, 5rem);
             padding: 2vh;
             margin-bottom: 0;
             background-color: rgb(210, 210, 220);
@@ -52,13 +61,13 @@
             color: #000000;
         }
 
+        /* The grid of color buttons now uses an aspect ratio so that its cells remain square */
         #color-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: repeat(3, 1fr);
             gap: 0;
-            aspect-ratio: 2/3;  /* Since it's 2 columns by 3 rows */
-            flex-shrink: 0;
+            aspect-ratio: 2 / 3;
         }
 
         .button-cell {
@@ -70,6 +79,7 @@
             align-items: center;
             transition: border 0.1s;
             cursor: pointer;
+            /* This makes the cell perfectly square */
             aspect-ratio: 1;
         }
 
@@ -78,8 +88,10 @@
             padding: calc(2vh - 0.2rem);
         }
 
+        /* The colored circles now size relative to the button cell.
+           (They were using "vw" before—the change to percentages makes their size relative to their container.) */
         .color-btn {
-            width: 60%;  /* Percentage of button-cell */
+            width: 60%;
             height: 60%;
             min-width: 2.5rem;
             min-height: 2.5rem;
@@ -88,38 +100,28 @@
             pointer-events: none;
         }
 
-        .color-btn:hover {
-            border: 2px solid black;
-        }
-
-        .color-btn.red::after { background-color: red; }
-        .color-btn.blue::after { background-color: blue; }
-        .color-btn.green::after { background-color: rgb(10, 210, 10); }
-        .color-btn.yellow::after { background-color: yellow; }
-        .color-btn.orange::after { background-color: orange; }
-        .color-btn.magenta::after { background-color: magenta; }
-
-        /* Game Board */
+        /* Game Board – Center Panel */
         #hole-board {
             background-color: rgb(210, 210, 220);
             padding: 2vh;
             border: 0.1rem solid black;
             display: flex;
             flex-direction: column;
-            min-width: 35vw;
+            width: 40%;
         }
 
         .game-row {
             display: flex;
             align-items: center;
-            margin-bottom: 1vh;
-            gap: 1vw;
-            height: 6vh;
+            margin-bottom: 1vmin;
+            gap: 1vmin;
+            height: 6vmin;
         }
 
+        /* The holes in the game board – these use relative units so that they don't shrink too small */
         .hole {
-            width: 3vw;
-            height: 3vw;
+            width: 3vmin;
+            height: 3vmin;
             min-width: 2.5rem;
             min-height: 2.5rem;
             border-radius: 50%;
@@ -127,6 +129,7 @@
             background-color: #d2d2dc;
         }
 
+        /* In the Answer Row, the holes are centered and display a larger font if needed */
         #answer-row .hole {
             display: flex;
             align-items: center;
@@ -134,26 +137,25 @@
             font-size: 1.5rem;
         }
 
+        /* The Correct Sequence label is set to a percentage relative to the game row,
+           and it is centered (both horizontally and vertically) with flexbox. */
         .sequence-label {
-            width: 8vw;
-            margin: 0 auto; /* Center horizontally */
+            width: 15%;
+            margin: 0 auto;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
         }
 
-        .mastermind-label {
-            width: 8vw;
-            margin-left: 1vw;
-            text-align: center;
-        }
-
+        /* The Check button (for each guess row) is styled similarly 
+           so that it aligns exactly with the sequence label */
         .check-button {
             padding: 0.5vh 1vw;
-            margin: 0 auto; /* Center horizontally */
+            margin: 0 auto;
             cursor: pointer;
-            width: 8vw;
+            width: 12%;
             font-size: 1rem;
             height: 3vh;
             display: flex;
@@ -165,23 +167,23 @@
             cursor: not-allowed;
         }
 
-        /* Feedback Pegs */
+        /* Feedback Pegs – these are also sized relatively */
         .feedback {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.5vh;
-            margin: 0 1vw;
-            padding: 0.5vh;
+            gap: 0.5vmin;
+            margin: 0 1vmin;
+            padding: 0.5vmin;
             border: 0.1rem solid black;
-            width: 3vw;
-            height: 3vw;
+            width: 3vmin;
+            height: 3vmin;
             min-width: 2.5rem;
             min-height: 2.5rem;
         }
 
         .peg {
-            width: 1vw;
-            height: 1vw;
+            width: 1vh;
+            height: 1vh;
             min-width: 0.8rem;
             min-height: 0.8rem;
             border-radius: 50%;
@@ -189,13 +191,21 @@
             background-color: #d2d2dc;
         }
 
-        /* Instructions Panel */
+        /* Container for the feedback inside each row */
+        .feedback-column {
+            width: 12%;
+            min-width: 5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Right Panel – Instructions and Scoreboard */
         #instruction-panel {
             background-color: #d2d2dc;
             padding: 2vh;
             border: 0.1rem solid black;
-            width: 20vw;
-            font-size: 1rem;
+            width: 30%;
+            font-size: clamp(0.8rem, 1.5vw, 1.2rem);
         }
 
         #scoreboard {
@@ -206,35 +216,104 @@
             text-align: center;
         }
 
-        /* Optional: Add some spacing between the lines */
+        /* Optional: spacing between the lines of scoreboard text */
         #scoreboard div {
             margin: 0.5vh 0;
         }
 
-        /* Add a container for mastermind label and feedback to keep them aligned */
-        .feedback-column {
-            width: 8vw;
-            min-width: 5rem;
-            display: flex;
-            justify-content: center;
-        }
-
-        /* Update reset button styles */
+        /* Reset Button – placed inside the left panel below the color buttons.
+           Its font size and dimensions are set using min() so that it scales nicely. */
         .reset-button {
-            font-size: min(2.5rem, 3vw); /* Use the smaller of 2.5rem or 3vw */
-            padding: 1vh 2vw; /* Horizontal padding to give text some breathing room */
+            font-size: clamp(2rem, 3vw, 2.5rem);
+            padding: 1vh 2vw;
             margin-top: 2vh;
-            width: auto; /* Let button width adapt to content */
-            min-width: 50%; /* Minimum width of 50% */
+            width: auto;
+            min-width: 50%;
             align-self: center;
             background-color: rgb(210, 210, 220);
             border: 0.1rem solid black;
-            color: #000000; /* Set text color to black */
+            color: #000000;
             cursor: pointer;
         }
 
         .reset-button:hover {
             background-color: #ffffff;
+        }
+
+        /* Media queries – for smaller screens, we stack panels vertically and use wider widths */
+        @media (max-width: 768px) {
+            #game-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            #button-board,
+            #hole-board,
+            #instruction-panel {
+                width: 90%;
+                margin-bottom: 2vh;
+            }
+            .sequence-label,
+            .check-button,
+            .feedback-column {
+                width: 20%;
+            }
+        }
+
+        /* Additional overrides for horizontal (landscape) mode to scale up the holeboard elements */
+        @media (min-width: 1024px) and (orientation: landscape) {
+           /* Reduce vertical spacing */
+           .game-row {
+               height: 8vmin;
+               gap: 0.5vmin;
+               margin-bottom: 0.5vmin;
+           }
+
+           /* Increase the hole sizes */
+           .hole {
+               width: 6vmin;
+               height: 6vmin;
+               min-width: 3.5rem;
+               min-height: 3.5rem;
+           }
+
+           /* Increase the size of the labels */
+           .sequence-label {
+               width: 18%;
+               font-size: 1.5rem;
+           }
+           .mastermind-label {
+               width: 18%;
+               font-size: 1.5rem;
+           }
+
+           /* Enlarge the check button */
+           .check-button {
+               width: 18%;
+               font-size: 1.5rem;
+               height: 6vmin;
+           }
+
+           /* Increase the feedback square and pegs */
+           .feedback {
+               width: 6vmin;
+               height: 6vmin;
+               min-width: 3.5rem;
+               min-height: 3.5rem;
+           }
+           .peg {
+               width: 2.5vmin;
+               height: 2.5vmin;
+               min-width: 1.2rem;
+               min-height: 1.2rem;
+           }
+        }
+
+        .mastermind-label {
+            width: 15%;
+            margin-left: 1vw;
+            text-align: center;
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            min-width: 6rem; /* Ensure enough space for the text */
         }
     </style>
 	</head>
