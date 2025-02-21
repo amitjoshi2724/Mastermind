@@ -17,7 +17,14 @@
             padding: 2vh;
         }
 
-        /* The game container now uses percentages for its children.
+        /* When numbers are hidden, force the text color (and text-shadow) to be transparent */
+        body.hide-numbers .color-btn,
+        body.hide-numbers .hole {
+            color: transparent !important;
+            text-shadow: none !important;
+        }
+
+        /* The game container uses percentages for its children.
            On larger screens the panels are side-by-side; on smaller screens they stack. */
         #game-container {
             display: flex;
@@ -27,7 +34,7 @@
             width: 100%;
         }
 
-        /* Left Panel – Color Selection Panel */
+        /* Left Panel – Color Selection Panel (30%) */
         #button-board {
             background-color: rgb(210, 210, 220);
             padding: 2vh;
@@ -38,7 +45,7 @@
             gap: 2vh;
         }
 
-        /* Undo button styling remains similar but with relative units */
+        /* Undo Button */
         #undo-button {
             font-size: clamp(3rem, 5vw, 5rem);
             padding: 2vh;
@@ -61,13 +68,13 @@
             color: #000000;
         }
 
-        /* The grid of color buttons now uses an aspect ratio so that its cells remain square */
+        /* Color buttons grid uses an aspect ratio; each cell is square */
         #color-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: repeat(3, 1fr);
             gap: 0;
-            aspect-ratio: 2 / 3;
+            aspect-ratio: 2/3;
         }
 
         .button-cell {
@@ -79,7 +86,7 @@
             align-items: center;
             transition: border 0.1s;
             cursor: pointer;
-            /* This makes the cell perfectly square */
+            /* Ensures a perfect square */
             aspect-ratio: 1;
         }
 
@@ -88,8 +95,8 @@
             padding: calc(2vh - 0.2rem);
         }
 
-        /* The colored circles now size relative to the button cell.
-           (They were using "vw" before—the change to percentages makes their size relative to their container.) */
+        /* Each color button now displays its digit.
+           Also, the text is styled so it's visible on the background. */
         .color-btn {
             width: 60%;
             height: 60%;
@@ -98,9 +105,14 @@
             border-radius: 50%;
             border: 0.15rem solid black;
             pointer-events: none;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+            /* Increase font size for buttonboard numbers (since these buttons are larger) */
+            font-size: clamp(2rem, 3vw, 2.5rem);
         }
 
-        /* Game Board – Center Panel */
+        /* Game Board – Center Panel (40%) */
         #hole-board {
             background-color: rgb(210, 210, 220);
             padding: 2vh;
@@ -118,7 +130,7 @@
             height: 6vmin;
         }
 
-        /* The holes in the game board – these use relative units so that they don't shrink too small */
+        /* Holes in the game board use relative units based on vmin so they scale in both directions */
         .hole {
             width: 3vmin;
             height: 3vmin;
@@ -127,18 +139,20 @@
             border-radius: 50%;
             border: 0.15rem solid black;
             background-color: #d2d2dc;
-        }
-
-        /* In the Answer Row, the holes are centered and display a larger font if needed */
-        #answer-row .hole {
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        /* In the Answer Row, the holes display a larger font if needed */
+        #answer-row .hole {
             font-size: 1.5rem;
         }
 
-        /* The Correct Sequence label is set to a percentage relative to the game row,
-           and it is centered (both horizontally and vertically) with flexbox. */
+        /* Labels in the answer row */
         .sequence-label {
             width: 15%;
             margin: 0 auto;
@@ -149,8 +163,6 @@
             font-size: clamp(1.2rem, 2vw, 1.8rem);
         }
 
-        /* The Check button (for each guess row) is styled similarly 
-           so that it aligns exactly with the sequence label */
         .check-button {
             padding: 0.5vh 1vw;
             margin: 0 auto;
@@ -167,7 +179,7 @@
             cursor: not-allowed;
         }
 
-        /* Feedback Pegs – these are also sized relatively */
+        /* Feedback pegs */
         .feedback {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -191,7 +203,6 @@
             background-color: #d2d2dc;
         }
 
-        /* Container for the feedback inside each row */
         .feedback-column {
             width: 12%;
             min-width: 5rem;
@@ -199,7 +210,7 @@
             justify-content: center;
         }
 
-        /* Right Panel – Instructions and Scoreboard */
+        /* Right Panel – Instructions and Scoreboard (30%) */
         #instruction-panel {
             background-color: #d2d2dc;
             padding: 2vh;
@@ -216,13 +227,66 @@
             text-align: center;
         }
 
-        /* Optional: spacing between the lines of scoreboard text */
         #scoreboard div {
             margin: 0.5vh 0;
         }
 
-        /* Reset Button – placed inside the left panel below the color buttons.
-           Its font size and dimensions are set using min() so that it scales nicely. */
+        /* Toggle Container for Number Visibility */
+        #toggle-container {
+            margin-top: 1vh;
+            text-align: center;
+            font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+        }
+
+        /* iOS-style toggle switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Reset Button in the left panel */
         .reset-button {
             font-size: clamp(2rem, 3vw, 2.5rem);
             padding: 1vh 2vw;
@@ -240,7 +304,7 @@
             background-color: #ffffff;
         }
 
-        /* Media queries – for smaller screens, we stack panels vertically and use wider widths */
+        /* Media queries – stack panels vertically on smaller screens */
         @media (max-width: 768px) {
             #game-container {
                 flex-direction: column;
@@ -259,61 +323,53 @@
             }
         }
 
-        /* Additional overrides for horizontal (landscape) mode to scale up the holeboard elements */
+        /* Additional overrides for horizontal (landscape) mode */
         @media (min-width: 1024px) and (orientation: landscape) {
-           /* Reduce vertical spacing */
-           .game-row {
-               height: 8vmin;
-               gap: 0.5vmin;
-               margin-bottom: 0.5vmin;
-           }
-
-           /* Increase the hole sizes */
-           .hole {
-               width: 6vmin;
-               height: 6vmin;
-               min-width: 3.5rem;
-               min-height: 3.5rem;
-           }
-
-           /* Increase the size of the labels */
-           .sequence-label {
-               width: 18%;
-               font-size: 1.5rem;
-           }
-           .mastermind-label {
-               width: 18%;
-               font-size: 1.5rem;
-           }
-
-           /* Enlarge the check button */
-           .check-button {
-               width: 18%;
-               font-size: 1.5rem;
-               height: 6vmin;
-           }
-
-           /* Increase the feedback square and pegs */
-           .feedback {
-               width: 6vmin;
-               height: 6vmin;
-               min-width: 3.5rem;
-               min-height: 3.5rem;
-           }
-           .peg {
-               width: 2.5vmin;
-               height: 2.5vmin;
-               min-width: 1.2rem;
-               min-height: 1.2rem;
-           }
+            .game-row {
+                height: 8vmin;
+                gap: 0.5vmin;
+                margin-bottom: 0.5vmin;
+            }
+            .hole {
+                width: 6vmin;
+                height: 6vmin;
+                min-width: 3.5rem;
+                min-height: 3.5rem;
+            }
+            .sequence-label {
+                width: 18%;
+                font-size: 1.5rem;
+            }
+            .mastermind-label {
+                width: 18%;
+                font-size: 1.5rem;
+            }
+            .check-button {
+                width: 18%;
+                font-size: 1.5rem;
+                height: 6vmin;
+            }
+            .feedback {
+                width: 6vmin;
+                height: 6vmin;
+                min-width: 3.5rem;
+                min-height: 3.5rem;
+            }
+            .peg {
+                width: 2.5vmin;
+                height: 2.5vmin;
+                min-width: 1.2rem;
+                min-height: 1.2rem;
+            }
         }
 
+        /* Mastermind label below the Answer row */
         .mastermind-label {
             width: 15%;
             margin-left: 1vw;
             text-align: center;
             font-size: clamp(1.2rem, 2vw, 1.8rem);
-            min-width: 6rem; /* Ensure enough space for the text */
+            min-width: 6rem;
         }
     </style>
 	</head>
@@ -324,22 +380,22 @@
             <button id="undo-button" disabled>Undo</button>
             <div id="color-buttons">
                 <div class="button-cell">
-                    <button class="color-btn" style="background-color: red"></button>
+                    <button class="color-btn" style="background-color: red">1</button>
                 </div>
                 <div class="button-cell">
-                    <button class="color-btn" style="background-color: blue"></button>
+                    <button class="color-btn" style="background-color: blue">2</button>
                 </div>
                 <div class="button-cell">
-                    <button class="color-btn" style="background-color: rgb(10, 210, 10)"></button>
+                    <button class="color-btn" style="background-color: rgb(10, 210, 10)">3</button>
                 </div>
                 <div class="button-cell">
-                    <button class="color-btn" style="background-color: yellow"></button>
+                    <button class="color-btn" style="background-color: yellow">4</button>
                 </div>
                 <div class="button-cell">
-                    <button class="color-btn" style="background-color: orange"></button>
+                    <button class="color-btn" style="background-color: orange">5</button>
                 </div>
                 <div class="button-cell">
-                    <button class="color-btn" style="background-color: magenta"></button>
+                    <button class="color-btn" style="background-color: magenta">6</button>
                 </div>
             </div>
             <button class="reset-button" onclick="initGame()">Reset Game</button>
@@ -382,6 +438,14 @@
                 <div>Current Streak: 0</div>
                 <div>Longest Streak: 0</div>
             </div>
+            <!-- Toggle switch for showing/hiding numbers -->
+            <div id="toggle-container">
+                <span>Show Numbers:</span>
+                <label class="switch">
+                    <input type="checkbox" id="numberToggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
         </div>
     </div>
 
@@ -403,6 +467,15 @@
             // Generate secret code
             secretCode = Array.from({length: 4}, () => colors[Math.floor(Math.random() * colors.length)]);
             
+            // Clear answer row so the previous correct answer is removed
+            const answerRow = document.getElementById('answer-row');
+            if (answerRow) {
+                answerRow.querySelectorAll('.hole').forEach(h => {
+                    h.style.backgroundColor = "#d2d2dc";
+                    h.textContent = "";
+                });
+            }
+
             // Clear game board except answer row
             const holeBoard = document.getElementById('hole-board');
             while (holeBoard.children.length > 1) {
@@ -473,6 +546,8 @@
                 if (currentGuess.length < 4) {
                     currentGuess.push(colors[index]);
                     currentRowElement.children[currentGuess.length - 1].style.backgroundColor = colors[index];
+                    // Set digit label in the hole (digit = index+1)
+                    currentRowElement.children[currentGuess.length - 1].textContent = index + 1;
                     document.getElementById('undo-button').disabled = false;
                     
                     // Enable check button only if we have 4 colors
@@ -488,6 +563,8 @@
                 const checkBtn = currentRowElement.querySelector('.check-button');
                 
                 currentRowElement.children[currentGuess.length - 1].style.backgroundColor = '#d2d2dc';
+                // Clear digit text on undo
+                currentRowElement.children[currentGuess.length - 1].textContent = '';
                 currentGuess.pop();
                 
                 // Disable check button since we now have fewer than 4 colors
@@ -579,7 +656,9 @@
             const answerRow = document.getElementById('answer-row');
             secretCode.forEach((color, index) => {
                 answerRow.children[index].style.backgroundColor = color;
-                answerRow.children[index].textContent = '';
+                // Determine digit (colors array order) corresponding to color
+                let digit = colors.indexOf(color) + 1;
+                answerRow.children[index].textContent = digit;
             });
         }
 
@@ -597,6 +676,15 @@
                 btn.disabled = !enabled;
             });
         }
+
+        // Toggle button event listener for showing/hiding numbers
+        document.getElementById('numberToggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.remove('hide-numbers');
+            } else {
+                document.body.classList.add('hide-numbers');
+            }
+        });
 
         // Initialize the game
         initGame();
