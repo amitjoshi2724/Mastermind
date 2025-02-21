@@ -136,7 +136,11 @@
 
         .sequence-label {
             width: 8vw;
-            margin-left: 1vw;
+            margin: 0 auto; /* Center horizontally */
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .mastermind-label {
@@ -147,10 +151,14 @@
 
         .check-button {
             padding: 0.5vh 1vw;
-            margin-left: auto;
+            margin: 0 auto; /* Center horizontally */
             cursor: pointer;
-            width: 6vw;
+            width: 8vw;
             font-size: 1rem;
+            height: 3vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .check-button:disabled {
