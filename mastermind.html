@@ -9,32 +9,33 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f5;
             margin: 0;
-            padding: 20px;
+            padding: 2vh;
         }
 
         #game-container {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 0;
+            min-height: 100vh;  /* Take at least full viewport height */
         }
 
         /* Color Selection Panel */
         #button-board {
             background-color: rgb(210, 210, 220);
-            padding: 20px;
-            border: 1px solid black;
-            width: 400px;
+            padding: 2vh;
+            border: 0.1rem solid black;
+            width: 25vw;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 2vh;
         }
 
         #undo-button {
-            font-size: 80px;
-            padding: 20px;
+            font-size: 5rem;
+            padding: 2vh;
             margin-bottom: 0;
             background-color: rgb(210, 210, 220);
-            border: 1px solid black;
+            border: 0.1rem solid black;
             color: rgb(128, 128, 128);
             cursor: pointer;
         }
@@ -43,7 +44,7 @@
             background-color: #e0e0e0;
             color: #a0a0a0;
             cursor: not-allowed;
-            border: 1px solid #a0a0a0;
+            border: 0.1rem solid #a0a0a0;
         }
 
         #undo-button:not(:disabled) {
@@ -56,14 +57,14 @@
             grid-template-columns: 1fr 1fr;
             grid-template-rows: repeat(3, 1fr);
             gap: 0;
-            height: 400px;
+            aspect-ratio: 2/3;  /* Since it's 2 columns by 3 rows */
             flex-shrink: 0;
         }
 
         .button-cell {
             background-color: rgb(210, 210, 220);
-            border: 1px solid black;
-            padding: 20px;
+            border: 0.1rem solid black;
+            padding: 2vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -73,15 +74,17 @@
         }
 
         .button-cell:hover {
-            border: 5px solid rgb(51, 153, 255);
-            padding: 16px; /* Reduced padding to maintain size when border grows */
+            border: 0.3rem solid rgb(51, 153, 255);
+            padding: calc(2vh - 0.2rem);
         }
 
         .color-btn {
-            width: 60px;
-            height: 60px;
+            width: 60%;  /* Percentage of button-cell */
+            height: 60%;
+            min-width: 2.5rem;
+            min-height: 2.5rem;
             border-radius: 50%;
-            border: 2px solid black;
+            border: 0.15rem solid black;
             pointer-events: none;
         }
 
@@ -99,27 +102,28 @@
         /* Game Board */
         #hole-board {
             background-color: rgb(210, 210, 220);
-            padding: 20px;
-            border: 1px solid black;
+            padding: 2vh;
+            border: 0.1rem solid black;
             display: flex;
             flex-direction: column;
+            min-width: 35vw;
         }
 
         .game-row {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
-            gap: 10px;
-            height: 60px;
+            margin-bottom: 1vh;
+            gap: 1vw;
+            height: 6vh;
         }
 
         .hole {
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
-            min-height: 50px;
+            width: 3vw;
+            height: 3vw;
+            min-width: 2.5rem;
+            min-height: 2.5rem;
             border-radius: 50%;
-            border: 2px solid black;
+            border: 0.15rem solid black;
             background-color: #d2d2dc;
         }
 
@@ -127,25 +131,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 1.5rem;
         }
 
         .sequence-label {
-            width: 120px;
-            margin-left: 10px;
+            width: 8vw;
+            margin-left: 1vw;
         }
 
         .mastermind-label {
-            width: 120px;
-            margin-left: 10px;
+            width: 8vw;
+            margin-left: 1vw;
             text-align: center;
         }
 
         .check-button {
-            padding: 5px 10px;
+            padding: 0.5vh 1vw;
             margin-left: auto;
             cursor: pointer;
-            width: 80px;
+            width: 6vw;
+            font-size: 1rem;
         }
 
         .check-button:disabled {
@@ -156,53 +161,66 @@
         .feedback {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 5px;
-            margin: 0 10px;
-            padding: 5px;
-            border: 1px solid black;
-            width: 50px;
-            height: 50px;
+            gap: 0.5vh;
+            margin: 0 1vw;
+            padding: 0.5vh;
+            border: 0.1rem solid black;
+            width: 3vw;
+            height: 3vw;
+            min-width: 2.5rem;
+            min-height: 2.5rem;
         }
 
         .peg {
-            width: 20px;
-            height: 20px;
+            width: 1vw;
+            height: 1vw;
+            min-width: 0.8rem;
+            min-height: 0.8rem;
             border-radius: 50%;
-            border: 1px solid black;
+            border: 0.1rem solid black;
             background-color: #d2d2dc;
         }
 
         /* Instructions Panel */
         #instruction-panel {
             background-color: #d2d2dc;
-            padding: 20px;
-            border: 1px solid black;
-            width: 300px;
+            padding: 2vh;
+            border: 0.1rem solid black;
+            width: 20vw;
+            font-size: 1rem;
         }
 
         #scoreboard {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid black;
+            margin-top: 2vh;
+            padding: 1vh;
+            border: 0.1rem solid black;
             background-color: rgb(210, 210, 220);
+            text-align: center;
+        }
+
+        /* Optional: Add some spacing between the lines */
+        #scoreboard div {
+            margin: 0.5vh 0;
         }
 
         /* Add a container for mastermind label and feedback to keep them aligned */
         .feedback-column {
-            width: 120px;
+            width: 8vw;
+            min-width: 5rem;
             display: flex;
             justify-content: center;
         }
 
-        /* Update styles for reset button */
+        /* Update reset button styles */
         .reset-button {
-            font-size: 40px;
-            padding: 10px;
-            margin-top: 20px;
-            width: 100%;
+            font-size: min(2.5rem, 3vw); /* Use the smaller of 2.5rem or 3vw */
+            padding: 1vh 2vw; /* Horizontal padding to give text some breathing room */
+            margin-top: 2vh;
+            width: auto; /* Let button width adapt to content */
+            min-width: 50%; /* Minimum width of 50% */
             align-self: center;
             background-color: rgb(210, 210, 220);
-            border: 1px solid black;
+            border: 0.1rem solid black;
             color: #000000; /* Set text color to black */
             cursor: pointer;
         }
