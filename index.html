@@ -1,580 +1,519 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title>Amit</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastermind Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f5;
+            margin: 0;
+            padding: 2vh;
+        }
+
+        #game-container {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            min-height: 100vh;  /* Take at least full viewport height */
+        }
+
+        /* Color Selection Panel */
+        #button-board {
+            background-color: rgb(210, 210, 220);
+            padding: 2vh;
+            border: 0.1rem solid black;
+            width: 25vw;
+            display: flex;
+            flex-direction: column;
+            gap: 2vh;
+        }
+
+        #undo-button {
+            font-size: 5rem;
+            padding: 2vh;
+            margin-bottom: 0;
+            background-color: rgb(210, 210, 220);
+            border: 0.1rem solid black;
+            color: rgb(128, 128, 128);
+            cursor: pointer;
+        }
+
+        #undo-button:disabled {
+            background-color: #e0e0e0;
+            color: #a0a0a0;
+            cursor: not-allowed;
+            border: 0.1rem solid #a0a0a0;
+        }
+
+        #undo-button:not(:disabled) {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        #color-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: repeat(3, 1fr);
+            gap: 0;
+            aspect-ratio: 2/3;  /* Since it's 2 columns by 3 rows */
+            flex-shrink: 0;
+        }
+
+        .button-cell {
+            background-color: rgb(210, 210, 220);
+            border: 0.1rem solid black;
+            padding: 2vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: border 0.1s;
+            cursor: pointer;
+            aspect-ratio: 1;
+        }
+
+        .button-cell:hover {
+            border: 0.3rem solid rgb(51, 153, 255);
+            padding: calc(2vh - 0.2rem);
+        }
+
+        .color-btn {
+            width: 60%;  /* Percentage of button-cell */
+            height: 60%;
+            min-width: 2.5rem;
+            min-height: 2.5rem;
+            border-radius: 50%;
+            border: 0.15rem solid black;
+            pointer-events: none;
+        }
+
+        .color-btn:hover {
+            border: 2px solid black;
+        }
+
+        .color-btn.red::after { background-color: red; }
+        .color-btn.blue::after { background-color: blue; }
+        .color-btn.green::after { background-color: rgb(10, 210, 10); }
+        .color-btn.yellow::after { background-color: yellow; }
+        .color-btn.orange::after { background-color: orange; }
+        .color-btn.magenta::after { background-color: magenta; }
+
+        /* Game Board */
+        #hole-board {
+            background-color: rgb(210, 210, 220);
+            padding: 2vh;
+            border: 0.1rem solid black;
+            display: flex;
+            flex-direction: column;
+            min-width: 35vw;
+        }
+
+        .game-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1vh;
+            gap: 1vw;
+            height: 6vh;
+        }
+
+        .hole {
+            width: 3vw;
+            height: 3vw;
+            min-width: 2.5rem;
+            min-height: 2.5rem;
+            border-radius: 50%;
+            border: 0.15rem solid black;
+            background-color: #d2d2dc;
+        }
+
+        #answer-row .hole {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .sequence-label {
+            width: 8vw;
+            margin-left: 1vw;
+        }
+
+        .mastermind-label {
+            width: 8vw;
+            margin-left: 1vw;
+            text-align: center;
+        }
+
+        .check-button {
+            padding: 0.5vh 1vw;
+            margin-left: auto;
+            cursor: pointer;
+            width: 6vw;
+            font-size: 1rem;
+        }
+
+        .check-button:disabled {
+            cursor: not-allowed;
+        }
+
+        /* Feedback Pegs */
+        .feedback {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5vh;
+            margin: 0 1vw;
+            padding: 0.5vh;
+            border: 0.1rem solid black;
+            width: 3vw;
+            height: 3vw;
+            min-width: 2.5rem;
+            min-height: 2.5rem;
+        }
+
+        .peg {
+            width: 1vw;
+            height: 1vw;
+            min-width: 0.8rem;
+            min-height: 0.8rem;
+            border-radius: 50%;
+            border: 0.1rem solid black;
+            background-color: #d2d2dc;
+        }
+
+        /* Instructions Panel */
+        #instruction-panel {
+            background-color: #d2d2dc;
+            padding: 2vh;
+            border: 0.1rem solid black;
+            width: 20vw;
+            font-size: 1rem;
+        }
+
+        #scoreboard {
+            margin-top: 2vh;
+            padding: 1vh;
+            border: 0.1rem solid black;
+            background-color: rgb(210, 210, 220);
+            text-align: center;
+        }
+
+        /* Optional: Add some spacing between the lines */
+        #scoreboard div {
+            margin: 0.5vh 0;
+        }
+
+        /* Add a container for mastermind label and feedback to keep them aligned */
+        .feedback-column {
+            width: 8vw;
+            min-width: 5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Update reset button styles */
+        .reset-button {
+            font-size: min(2.5rem, 3vw); /* Use the smaller of 2.5rem or 3vw */
+            padding: 1vh 2vw; /* Horizontal padding to give text some breathing room */
+            margin-top: 2vh;
+            width: auto; /* Let button width adapt to content */
+            min-width: 50%; /* Minimum width of 50% */
+            align-self: center;
+            background-color: rgb(210, 210, 220);
+            border: 0.1rem solid black;
+            color: #000000; /* Set text color to black */
+            cursor: pointer;
+        }
+
+        .reset-button:hover {
+            background-color: #ffffff;
+        }
+    </style>
 	</head>
-	<body style ="background-color:orange">
-    <strong><h1 style ="text-align:center; color:green; font-size:40px">Amit Joshi</h1></strong>
-    
-     <p>My name is Amit Joshi. I am 13 year old boy from Virginia</p>
-     <p> I have created an animation using the programming language javascript.  Here it is below.  Move the stick figure with the mouse.<p>
-     <h2></h2> <script type="text/javascript" src="/js/embed.js?editor=no&buttons=noauthor=no&embed=yes"></script>
-     
-     <p><h2><a href="http://www.khanacademy.org/computer-programming/amit-joshis-stickman-mousexy/991410553">Amit Joshi&#x27;s Stickman MouseX+Y</a></h2> <script src="http://www.khanacademy.org/computer-programming/amit-joshis-stickman-mousexy/991410553/embed.js?editor=no&amp;buttons=no&amp;author=no&amp;embed=yes"></script> <p>Made using: <a href="http://www.khanacademy.org/computer-programming">Khan Academy Computer Science</a>.</p> </p>
-    <h3> This is the master mind game applet I created in Java </h3
-	  <applet code=Applet16.class 
-        archive="lab16.jar"
-        width="1280" height="760">
-       </applet> 
- <p>I have created a chemistry quiz using the programming language ruby.  Here is a copy of my code.  To run the program, copy and paste the code into the editor's content white box at <a href="http://www.repl.it/languages/ruby" target=_blank>repl.it/languages/ruby</a> Only copy the text until you see the three line break.</p>
-      	   
-	<p><pre>
-     <hr>
-     print " Are you ready to take the elements\n quiz! Let's get started! You submit by typing and then pressing enter.For questions with two or more answers, the order of your answers does not matter. Enter yes to play or no to leave."
-one_answer=gets.chomp.strip.capitalize
-if one_answer=="Yes"
-    print "Your first question is: What are the\n two  elements that make up ammonia?\n Submit one, then submit the other."
-elsif one_answer=="No"
-    print "Ok, maybe another time."
-   
-     return
-     
-end
-two_answer=gets.chomp.capitalize
-if two_answer=="Hydrogen" or two_answer=="Nitrogen"
-    print "Now, submit the other"
-else
-    print "Sorry, wrong answer. You scored 0%."
- return
-end
-three_answer=gets.chomp.capitalize
-if (two_answer=="Hydrogen" && three_answer=="Nitrogen") || (two_answer=="Nitrogen" && three_answer=="Hydrogen")
-    print "Correct!  "
-elsif 
-    print "Wrong! You scored 0%."
-        return
-end
-    print "Your second question is: Protium, Deuterium, and Tritium are all forms of what element?"
-four_answer=gets.chomp.capitalize
-if four_answer=="Hydrogen"
-    print "Correct.  "
-else 
-    print"Wrong. Good try. You scored 25%."
-    return
-end
-    print "Your third question is: What two elements have the highest density? Submit one and then submit the other."
-five_answer=gets.chomp.capitalize
-if five_answer=="Osmium" || five_answer=="Iridium"
-    print "Now, type the other."
-     six_answer=gets.chomp.capitalize
-else
+<body>
+    <div id="game-container">
+        <!-- Color Selection Panel -->
+        <div id="button-board">
+            <button id="undo-button" disabled>Undo</button>
+            <div id="color-buttons">
+                <div class="button-cell">
+                    <button class="color-btn" style="background-color: red"></button>
+                </div>
+                <div class="button-cell">
+                    <button class="color-btn" style="background-color: blue"></button>
+                </div>
+                <div class="button-cell">
+                    <button class="color-btn" style="background-color: rgb(10, 210, 10)"></button>
+                </div>
+                <div class="button-cell">
+                    <button class="color-btn" style="background-color: yellow"></button>
+                </div>
+                <div class="button-cell">
+                    <button class="color-btn" style="background-color: orange"></button>
+                </div>
+                <div class="button-cell">
+                    <button class="color-btn" style="background-color: magenta"></button>
+                </div>
+            </div>
+            <button class="reset-button" onclick="initGame()">Reset Game</button>
+        </div>
 
-end
+        <!-- Game Board -->
+        <div id="hole-board">
+            <!-- Answer Row -->
+            <div class="game-row" id="answer-row">
+                <div class="hole"></div>
+                <div class="hole"></div>
+                <div class="hole"></div>
+                <div class="hole"></div>
+                <div class="sequence-label">Correct Sequence</div>
+                <div class="mastermind-label">Mastermind</div>
+            </div>
+        </div>
 
- if (five_answer=="Osmium" && six_answer=="Iridium") || (five_answer=="Iridium" && six_answer=="Osmium")
-    print "Correct  "
- else
-      print "Sorry, wrong answer.Good try. You scored 50% "
-      return
-end
-      print "Your fourth question is:  What are the three only ferromagnetic elements on the periodic table? Submit one by one and don't add extra spaces anywhere! The order of your answers does not matter."
- seven_answer=gets.chomp.capitalize
- eight_answer=gets.chomp.capitalize
- nine_answer=gets.chomp.capitalize
-unless (seven_answer=="Iron" && eight_answer=="Cobalt" && nine_answer=="Nickel") || (seven_answer=="Iron" && eight_answer=="Nickel" && nine_answer=="Cobalt") || (seven_answer=="Cobalt" && eight_answer=="Iron" && nine_answer=="Nickel") || (seven_answer=="Cobalt" && eight_answer=="Nickel" && nine_answer=="Iron") || (seven_answer=="Nickel" && eight_answer=="Iron" && nine_answer=="Cobalt") || (seven_answer=="Nickel" && eight_answer=="Cobalt" && nine_answer=="Iron")
-      print "Wrong. Good try. You scored 75%"
-else
-      print "Correct! You scored 100% :)"
-end
-     </pre></p><hr>
-          <hr>
-     <hr>
-     <p>I have created a rock,paper,scissors game using the programming language ruby.  Here is a copy of my code.  To run the program,
-      copy and paste the code into the editor's content white box at <a href="http://www.repl.it/languages/ruby" target=_blank>repl.it/languages/ruby</a> Only copy until you see the three line break. This program uses strategy based on your previous choices.</p>
-     <p><pre>
-     <hr>
+        <!-- Instructions Panel -->
+        <div id="instruction-panel">
+            <h3>Instructions:</h3>
+            <p>This is the game mastermind. A sequence of colors
+            is determined when the game starts. Colors can be repeated.
+            You have to guess
+            that sequence by clicking the colored circle buttons. Notice the undo
+            button to be used if you make a mistake on a particular row.
+            After you have guessed a row, ensure that you want to submit
+            that row by clicking check. Once you have clicked check
+            you can't undo that row. After check is clicked you will be
+            informed of your results. A white peg means that one of your
+            guesses was guessed correctly in the right location while a
+            black peg means that one of your guesses was guessed correctly
+            but in the wrong location. If a color is repeated in the answer,
+            and a player selects that color, that color is only counted once
+            by the pegs, or feedback from the computer.
+            You have ten tries to guess the correct sequence.
+            Credits: Developed by Amit Joshi. Github: @amitjoshi24</p>
+            <div id="scoreboard">
+                <div>Wins: 0/0 (0.00%)</div>
+                <div>Current Streak: 0</div>
+                <div>Longest Streak: 0</div>
+            </div>
+        </div>
+    </div>
 
-     print "Let's play Rock, Paper, Scissors. Enter rock, paper, or scissors to begin. Enter exit at any point in the game to leave."
-Amit1 = ["Rock", "Paper", "Scissors"]
-Amit2 = [1,1,1,1,2]
-Amit3 = [ "Rock", "Rock", "Rock", "Rock", "Rock", "Paper", "Scissors"]
-Amit4 = [ "Scissors", "Scissors", "Scissors", "Rock", "Paper"]
-Amit5 = [ "Scissors", "Scissors", "Scissors", "Scissors", "Scissors", "Paper", "Rock"]
-Amit6= [ "Paper", "Paper", "Paper", "Rock", "Scissors"]
-Amit7 = [ "Paper", "Paper", "Paper", "Paper", "Paper", "Rock", "Scissors"]
-Amit8 = ["Rock", "Rock", "Rock", "Paper", "Scissors"]
-Amit9 = ["Rock", "Rock", "Paper", "Scissors"]
-Amit10 = ["Paper", "Paper", "Rock", "Scissors"]
-Amit11 = ["Scissors", "Scissors", "Rock", "Paper"]
-loop do
-item = Amit1[rand(Amit1.length)]
-item2 = Amit2[rand(Amit2.length)]
-input=gets.chomp.strip.capitalize
+    <script>
+        const colors = ['red', 'blue', 'rgb(10, 210, 10)', 'yellow', 'orange', 'magenta'];
+        let secretCode = [];
+        let currentGuess = [];
+        let currentRow = 0;
+        const maxRows = 10;
+        let gameActive = true;
+        let stats = {
+            wins: 0,
+            total: 0,
+            currentStreak: 0,
+            longestStreak: 0
+        };
 
-    if item2==2 && input == "Rock" && item == "Paper"
-      puts "You lose, try again."
-elsif item2==2 &&  input == "Rock" && item == "Scissors"
-      puts "You win, play again"
-elsif item2==2 &&  input == "Scissors" && item == "Rock"
-      puts "You lose, try again"
-elsif item2==2 &&  input == "Scissors" && item == "Paper"
-      puts "You win, play again."
-elsif item2==2 &&  input == "Paper" && item == "Scissors"
-      puts "You lose, try again"
-elsif item2==2 &&  input == "Paper" && item == "Rock"
-      puts "You win, play again."
-elsif item2==2 &&  input == "Paper" && item == "Paper"
-     puts "You tied"
-elsif item2==2 &&  input == "Scissors" && item == "Scissors"
-      puts "You tied"
-elsif item2==2 &&  input == "Rock" && item == "Rock"
-      puts "You tied"
-elsif item2==2 && input == "Exit"
-      puts "Goodbye"
-            break
-elsif item2==1 && input == "Rock" && item == "Paper"
-      puts "You lose, try again."
-      computer_input = Amit3[rand(Amit3.length)]
-      input=gets.chomp.strip.capitalize
-    if computer_input=="Rock"
-      case input
-      when "Scissors"
-      puts "You lose, try again."
-      when "Paper"
-      puts "You win, play again."
-      when "Rock"
-      puts "You tied"
-      when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input=="Paper"
-      case input
-      when "Scissors"
-      puts "You win, play again."
-      when "Paper"
-      puts "You tied"
-      when "Rock"
-      puts "You lose, try again."
-            when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input== "Scissors"
-        case input
-        when "Scissors"
-        puts "You tied"
-        when "Paper"
-        puts "You lose, try again."
-        when "Rock"
-        puts "You win, play again."
-              when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-    end
-    end   
-elsif item2==1 &&  input == "Rock" && item == "Scissors"
-      puts "You win, play again."
-      computer_input2=Amit4[rand(Amit4.length)]
-      input=gets.chomp.strip.capitalize
-        if computer_input2=="Rock"
-      case input
-      when "Scissors"
-      puts "You lose, try again."
-      when "Paper"
-      puts "You win, play again."
-      when "Rock"
-      puts "You tied"
-      when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input2=="Paper"
-      case input
-      when "Scissors"
-      puts "You win, play again."
-      when "Paper"
-      puts "You tied"
-      when "Rock"
-      puts "You lose, try again."
-            when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input2== "Scissors"
-        case input
-        when "Scissors"
-        puts "You tied"
-        when "Paper"
-        puts "You lose, try again."
-        when "Rock"
-        puts "You win, play again."
-              when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-    end
-    end   
-elsif item2==1 &&  input == "Scissors" && item == "Rock"
-      puts "You lose, try again"
-      computer_input3 = Amit5[rand(Amit5.length)]
-      input=gets.chomp.strip.capitalize
-              if computer_input3=="Rock"
-      case input
-      when "Scissors"
-      puts "You lose, try again."
-      when "Paper"
-      puts "You win, play again."
-      when "Rock"
-      puts "You tied"
-      when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input3=="Paper"
-      case input
-      when "Scissors"
-      puts "You win, play again."
-      when "Paper"
-      puts "You tied"
-      when "Rock"
-      puts "You lose, try again."
-            when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input3== "Scissors"
-        case input
-        when "Scissors"
-        puts "You tied"
-        when "Paper"
-        puts "You lose, try again."
-        when "Rock"
-        puts "You win, play again."
-              when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-    end
-    end   
-elsif item2==1 &&  input == "Scissors" && item == "Paper"
-      puts "You win, play again."
-      computer_input4=Amit6[rand(Amit6.length)]
-      input=gets.chomp.strip.capitalize
-    if computer_input4=="Rock"
-      case input
-      when "Scissors"
-      puts "You lose, try again."
-      when "Paper"
-      puts "You win, play again."
-      when "Rock"
-      puts "You tied"
-      when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input4=="Paper"
-      case input
-      when "Scissors"
-      puts "You win, play again."
-      when "Paper"
-      puts "You tied"
-      when "Rock"
-      puts "You lose, try again."
-            when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input4== "Scissors"
-        case input
-        when "Scissors"
-        puts "You tied"
-        when "Paper"
-        puts "You lose, try again."
-        when "Rock"
-        puts "You win, play again."
-              when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-    end
-    end  
-elsif item2==1 &&  input == "Paper" && item == "Scissors"
-      puts "You lose, try again"
-      computer_input5=Amit7[rand(Amit7.length)]
-      input=gets.chomp.strip.capitalize
-    if computer_input5=="Rock"
-      case input
-      when "Scissors"
-      puts "You lose, try again."
-      when "Paper"
-      puts "You win, play again."
-      when "Rock"
-      puts "You tied"
-      when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input5=="Paper"
-      case input
-      when "Scissors"
-      puts "You win, play again."
-      when "Paper"
-      puts "You tied"
-      when "Rock"
-      puts "You lose, try again."
-            when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input5== "Scissors"
-        case input
-        when "Scissors"
-        puts "You tied"
-        when "Paper"
-        puts "You lose, try again."
-        when "Rock"
-        puts "You win, play again."
-              when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-    end
-    end  
-elsif item2==1 &&  input == "Paper" && item == "Rock"
-      puts "You win, play again."
-      computer_input6=Amit8[rand(Amit8.length)]
-      input=gets.chomp.strip.capitalize
-    if computer_input6=="Rock"
-      case input
-      when "Scissors"
-      puts "You lose, try again."
-      when "Paper"
-      puts "You win, play again."
-      when "Rock"
-      puts "You tied"
-      when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input6=="Paper"
-      case input
-      when "Scissors"
-      puts "You win, play again."
-      when "Paper"
-      puts "You tied"
-      when "Rock"
-      puts "You lose, try again."
-            when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input6== "Scissors"
-        case input
-        when "Scissors"
-        puts "You tied"
-        when "Paper"
-        puts "You lose, try again."
-        when "Rock"
-        puts "You win, play again."
-              when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-    end
-    end  
-elsif item2==1 &&  input == "Paper" && item == "Paper"
-     puts "You tied"
-           computer_input7=Amit9[rand(Amit9.length)]
-      input=gets.chomp.strip.capitalize
-    if computer_input7=="Rock"
-      case input
-      when "Scissors"
-      puts "You lose, try again."
-      when "Paper"
-      puts "You win, play again."
-      when "Rock"
-      puts "You tied"
-      when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input7=="Paper"
-      case input
-      when "Scissors"
-      puts "You win, play again."
-      when "Paper"
-      puts "You tied"
-      when "Rock"
-      puts "You lose, try again."
-            when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input7== "Scissors"
-        case input
-        when "Scissors"
-        puts "You tied"
-        when "Paper"
-        puts "You lose, try again."
-        when "Rock"
-        puts "You win, play again."
-              when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-    end
-    end  
-elsif item2==1 &&  input == "Scissors" && item == "Scissors"
-      puts "You tied"
-                 computer_input8=Amit10[rand(Amit10.length)]
-      input=gets.chomp.strip.capitalize
-    if computer_input8=="Rock"
-      case input
-      when "Scissors"
-      puts "You lose, try again."
-      when "Paper"
-      puts "You win, play again."
-      when "Rock"
-      puts "You tied"
-      when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input8=="Paper"
-      case input
-      when "Scissors"
-      puts "You win, play again."
-      when "Paper"
-      puts "You tied"
-      when "Rock"
-      puts "You lose, try again."
-            when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input8== "Scissors"
-        case input
-        when "Scissors"
-        puts "You tied"
-        when "Paper"
-        puts "You lose, try again."
-        when "Rock"
-        puts "You win, play again."
-              when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-    end
-    end 
-elsif item2==1 &&  input == "Rock" && item == "Rock"
-      puts "You tied"
-                       computer_input9=Amit11[rand(Amit11.length)]
-      input=gets.chomp.strip.capitalize
-    if computer_input9=="Rock"
-      case input
-      when "Scissors"
-      puts "You lose, try again."
-      when "Paper"
-      puts "You win, play again."
-      when "Rock"
-      puts "You tied"
-      when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input9=="Paper"
-      case input
-      when "Scissors"
-      puts "You win, play again."
-      when "Paper"
-      puts "You tied"
-      when "Rock"
-      puts "You lose, try again."
-            when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-      end
-    elsif computer_input9== "Scissors"
-        case input
-        when "Scissors"
-        puts "You tied"
-        when "Paper"
-        puts "You lose, try again."
-        when "Rock"
-        puts "You win, play again."
-              when "Exit"
-      puts "Goodbye"
-      break
-      else
-          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
-    end
-    end 
-elsif item2==1 && input == "Exit"
-      puts "Goodbye"
-      break
-else 
-      puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly."
-end
-end
-     </pre></p>
-     <hr>
-               <hr>
-     <hr>
-     <em><h2 style ="color:blue"> Interests</h2></em>
-     
-         <ul style ="font-family:Sylfaen; color:black">
-            <li>Google Earth</li>
-            <li>Reading, My favorite series are:</li>
+        function initGame() {
+            // Generate secret code
+            secretCode = Array.from({length: 4}, () => colors[Math.floor(Math.random() * colors.length)]);
             
-            <ol>
-         <li>Harry Potter</li>
-         <li>The Kane Chronicles</li>
-         <li>The Artemis Fowl series</li>
-         <li>The Secrets of the Immortal Nicholas Flamel</li>
-         </ol>
-         <li>Writing html</li>
-         <li>Family and Friends</li>
-         <ul>
-             <li>I have 4 people in my family.</li>
-             <li>I have a mom, dad, and a sister.</li>
-         </ul>
-         
-     </ul>
+            // Clear game board except answer row
+            const holeBoard = document.getElementById('hole-board');
+            while (holeBoard.children.length > 1) {
+                holeBoard.removeChild(holeBoard.lastChild);
+            }
+
+            // Create game rows
+            for (let i = 0; i < maxRows; i++) {
+                createGameRow(i);
+            }
+
+            // Reset game state
+            currentGuess = [];
+            currentRow = 0;
+            gameActive = true;
+            document.getElementById('undo-button').disabled = true;
+            enableColorButtons(true);
+        }
+
+        function createGameRow(rowIndex) {
+            const row = document.createElement('div');
+            row.className = 'game-row';
+            
+            // Create holes
+            for (let i = 0; i < 4; i++) {
+                const hole = document.createElement('div');
+                hole.className = 'hole';
+                row.appendChild(hole);
+            }
+
+            // Create check button
+            const checkBtn = document.createElement('button');
+            checkBtn.className = 'check-button';
+            checkBtn.textContent = 'Check';
+            checkBtn.disabled = true;
+            checkBtn.onclick = () => {
+                checkGuess(rowIndex);
+                checkBtn.disabled = true;
+            };
+            row.appendChild(checkBtn);
+
+            // Create feedback container
+            const feedbackColumn = document.createElement('div');
+            feedbackColumn.className = 'feedback-column';
+            
+            // Create feedback pegs
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback';
+            for (let i = 0; i < 4; i++) {
+                const peg = document.createElement('div');
+                peg.className = 'peg';
+                feedback.appendChild(peg);
+            }
+            feedbackColumn.appendChild(feedback);
+            row.appendChild(feedbackColumn);
+
+            document.getElementById('hole-board').appendChild(row);
+        }
+
+        // Update color selection handlers
+        document.querySelectorAll('.button-cell').forEach((cell, index) => {
+            cell.onclick = () => {
+                if (!gameActive) return;
+                
+                const currentRowElement = document.getElementsByClassName('game-row')[1 + (maxRows - 1 - currentRow)];
+                const checkBtn = currentRowElement.querySelector('.check-button');
+                
+                if (currentGuess.length < 4) {
+                    currentGuess.push(colors[index]);
+                    currentRowElement.children[currentGuess.length - 1].style.backgroundColor = colors[index];
+                    document.getElementById('undo-button').disabled = false;
+                    
+                    // Enable check button only if we have 4 colors
+                    checkBtn.disabled = currentGuess.length !== 4;
+                }
+            };
+        });
+
+        // Update undo handler
+        document.getElementById('undo-button').onclick = () => {
+            if (currentGuess.length > 0) {
+                const currentRowElement = document.getElementsByClassName('game-row')[1 + (maxRows - 1 - currentRow)];
+                const checkBtn = currentRowElement.querySelector('.check-button');
+                
+                currentRowElement.children[currentGuess.length - 1].style.backgroundColor = '#d2d2dc';
+                currentGuess.pop();
+                
+                // Disable check button since we now have fewer than 4 colors
+                checkBtn.disabled = true;
+                
+                // Disable undo button if no colors left
+                document.getElementById('undo-button').disabled = currentGuess.length === 0;
+            }
+        };
+
+        function checkGuess(rowIndex) {
+            if (currentGuess.length !== 4) return;
+
+            const feedback = getFeedback();
+            const currentRowElement = document.getElementsByClassName('game-row')[1 + (maxRows - 1 - currentRow)];
+            const pegs = currentRowElement.querySelector('.feedback').children;
+            
+            let pegIndex = 0;
+            feedback.white.forEach(() => {
+                pegs[pegIndex++].style.backgroundColor = 'white';
+            });
+            feedback.black.forEach(() => {
+                pegs[pegIndex++].style.backgroundColor = 'black';
+            });
+
+            if (feedback.white.length === 4) {
+                gameWon();
+            } else if (currentRow === maxRows - 1) {
+                gameLost();
+            } else {
+                currentRow++;
+                currentGuess = [];
+                document.getElementById('undo-button').disabled = true;
+            }
+        }
+
+        function getFeedback() {
+            const feedback = { white: [], black: [] };
+            const codeCopy = [...secretCode];
+            const guessCopy = [...currentGuess];
+
+            // Check for correct position and color (white pegs)
+            for (let i = 0; i < 4; i++) {
+                if (guessCopy[i] === codeCopy[i]) {
+                    feedback.white.push(i);
+                    codeCopy[i] = null;
+                    guessCopy[i] = null;
+                }
+            }
+
+            // Check for correct color but wrong position (black pegs)
+            for (let i = 0; i < 4; i++) {
+                if (guessCopy[i] === null) continue;
+                const codeIndex = codeCopy.indexOf(guessCopy[i]);
+                if (codeIndex !== -1) {
+                    feedback.black.push(i);
+                    codeCopy[codeIndex] = null;
+                }
+            }
+
+            return feedback;
+        }
+
+        function gameWon() {
+            gameActive = false;
+            stats.wins++;
+            stats.total++;
+            stats.currentStreak++;
+            stats.longestStreak = Math.max(stats.longestStreak, stats.currentStreak);
+            updateScoreboard();
+            revealAnswer();
+            setTimeout(() => {
+                alert('Congratulations! You won!');
+            }, 100);
+        }
+
+        function gameLost() {
+            gameActive = false;
+            stats.total++;
+            stats.currentStreak = 0;
+            updateScoreboard();
+            revealAnswer();
+            setTimeout(() => {
+                alert('Game Over! The correct sequence is shown above.');
+            }, 100);
+        }
+
+        function revealAnswer() {
+            const answerRow = document.getElementById('answer-row');
+            secretCode.forEach((color, index) => {
+                answerRow.children[index].style.backgroundColor = color;
+                answerRow.children[index].textContent = '';
+            });
+        }
+
+        function updateScoreboard() {
+            const winPercentage = (stats.wins / stats.total * 100).toFixed(2);
+            document.getElementById('scoreboard').innerHTML = `
+                <div>Wins: ${stats.wins}/${stats.total} (${winPercentage}%)</div>
+                <div>Current Streak: ${stats.currentStreak}</div>
+                <div>Longest Streak: ${stats.longestStreak}</div>
+            `;
+        }
+
+        function enableColorButtons(enabled) {
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.disabled = !enabled;
+            });
+        }
+
+        // Initialize the game
+        initGame();
+    </script>
 	</body>
 </html>
+

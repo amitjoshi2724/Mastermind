@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Amit</title>
+	</head>
+	<body style ="background-color:orange">
+    <strong><h1 style ="text-align:center; color:green; font-size:40px">Amit Joshi</h1></strong>
+    
+     <p>My name is Amit Joshi. I am 13 year old boy from Virginia</p>
+     <p> I have created an animation using the programming language javascript.  Here it is below.  Move the stick figure with the mouse.<p>
+     <h2></h2> <script type="text/javascript" src="/js/embed.js?editor=no&buttons=noauthor=no&embed=yes"></script>
+     
+     <p><h2><a href="http://www.khanacademy.org/computer-programming/amit-joshis-stickman-mousexy/991410553">Amit Joshi&#x27;s Stickman MouseX+Y</a></h2> <script src="http://www.khanacademy.org/computer-programming/amit-joshis-stickman-mousexy/991410553/embed.js?editor=no&amp;buttons=no&amp;author=no&amp;embed=yes"></script> <p>Made using: <a href="http://www.khanacademy.org/computer-programming">Khan Academy Computer Science</a>.</p> </p>
+    <h3> This is the master mind game applet I created in Java </h3
+	  <applet code=Applet16.class 
+        archive="lab16.jar"
+        width="1280" height="760">
+       </applet> 
+ <p>I have created a chemistry quiz using the programming language ruby.  Here is a copy of my code.  To run the program, copy and paste the code into the editor's content white box at <a href="http://www.repl.it/languages/ruby" target=_blank>repl.it/languages/ruby</a> Only copy the text until you see the three line break.</p>
+      	   
+	<p><pre>
+     <hr>
+     print " Are you ready to take the elements\n quiz! Let's get started! You submit by typing and then pressing enter.For questions with two or more answers, the order of your answers does not matter. Enter yes to play or no to leave."
+one_answer=gets.chomp.strip.capitalize
+if one_answer=="Yes"
+    print "Your first question is: What are the\n two  elements that make up ammonia?\n Submit one, then submit the other."
+elsif one_answer=="No"
+    print "Ok, maybe another time."
+   
+     return
+     
+end
+two_answer=gets.chomp.capitalize
+if two_answer=="Hydrogen" or two_answer=="Nitrogen"
+    print "Now, submit the other"
+else
+    print "Sorry, wrong answer. You scored 0%."
+ return
+end
+three_answer=gets.chomp.capitalize
+if (two_answer=="Hydrogen" && three_answer=="Nitrogen") || (two_answer=="Nitrogen" && three_answer=="Hydrogen")
+    print "Correct!  "
+elsif 
+    print "Wrong! You scored 0%."
+        return
+end
+    print "Your second question is: Protium, Deuterium, and Tritium are all forms of what element?"
+four_answer=gets.chomp.capitalize
+if four_answer=="Hydrogen"
+    print "Correct.  "
+else 
+    print"Wrong. Good try. You scored 25%."
+    return
+end
+    print "Your third question is: What two elements have the highest density? Submit one and then submit the other."
+five_answer=gets.chomp.capitalize
+if five_answer=="Osmium" || five_answer=="Iridium"
+    print "Now, type the other."
+     six_answer=gets.chomp.capitalize
+else
+
+end
+
+ if (five_answer=="Osmium" && six_answer=="Iridium") || (five_answer=="Iridium" && six_answer=="Osmium")
+    print "Correct  "
+ else
+      print "Sorry, wrong answer.Good try. You scored 50% "
+      return
+end
+      print "Your fourth question is:  What are the three only ferromagnetic elements on the periodic table? Submit one by one and don't add extra spaces anywhere! The order of your answers does not matter."
+ seven_answer=gets.chomp.capitalize
+ eight_answer=gets.chomp.capitalize
+ nine_answer=gets.chomp.capitalize
+unless (seven_answer=="Iron" && eight_answer=="Cobalt" && nine_answer=="Nickel") || (seven_answer=="Iron" && eight_answer=="Nickel" && nine_answer=="Cobalt") || (seven_answer=="Cobalt" && eight_answer=="Iron" && nine_answer=="Nickel") || (seven_answer=="Cobalt" && eight_answer=="Nickel" && nine_answer=="Iron") || (seven_answer=="Nickel" && eight_answer=="Iron" && nine_answer=="Cobalt") || (seven_answer=="Nickel" && eight_answer=="Cobalt" && nine_answer=="Iron")
+      print "Wrong. Good try. You scored 75%"
+else
+      print "Correct! You scored 100% :)"
+end
+     </pre></p><hr>
+          <hr>
+     <hr>
+     <p>I have created a rock,paper,scissors game using the programming language ruby.  Here is a copy of my code.  To run the program,
+      copy and paste the code into the editor's content white box at <a href="http://www.repl.it/languages/ruby" target=_blank>repl.it/languages/ruby</a> Only copy until you see the three line break. This program uses strategy based on your previous choices.</p>
+     <p><pre>
+     <hr>
+
+     print "Let's play Rock, Paper, Scissors. Enter rock, paper, or scissors to begin. Enter exit at any point in the game to leave."
+Amit1 = ["Rock", "Paper", "Scissors"]
+Amit2 = [1,1,1,1,2]
+Amit3 = [ "Rock", "Rock", "Rock", "Rock", "Rock", "Paper", "Scissors"]
+Amit4 = [ "Scissors", "Scissors", "Scissors", "Rock", "Paper"]
+Amit5 = [ "Scissors", "Scissors", "Scissors", "Scissors", "Scissors", "Paper", "Rock"]
+Amit6= [ "Paper", "Paper", "Paper", "Rock", "Scissors"]
+Amit7 = [ "Paper", "Paper", "Paper", "Paper", "Paper", "Rock", "Scissors"]
+Amit8 = ["Rock", "Rock", "Rock", "Paper", "Scissors"]
+Amit9 = ["Rock", "Rock", "Paper", "Scissors"]
+Amit10 = ["Paper", "Paper", "Rock", "Scissors"]
+Amit11 = ["Scissors", "Scissors", "Rock", "Paper"]
+loop do
+item = Amit1[rand(Amit1.length)]
+item2 = Amit2[rand(Amit2.length)]
+input=gets.chomp.strip.capitalize
+
+    if item2==2 && input == "Rock" && item == "Paper"
+      puts "You lose, try again."
+elsif item2==2 &&  input == "Rock" && item == "Scissors"
+      puts "You win, play again"
+elsif item2==2 &&  input == "Scissors" && item == "Rock"
+      puts "You lose, try again"
+elsif item2==2 &&  input == "Scissors" && item == "Paper"
+      puts "You win, play again."
+elsif item2==2 &&  input == "Paper" && item == "Scissors"
+      puts "You lose, try again"
+elsif item2==2 &&  input == "Paper" && item == "Rock"
+      puts "You win, play again."
+elsif item2==2 &&  input == "Paper" && item == "Paper"
+     puts "You tied"
+elsif item2==2 &&  input == "Scissors" && item == "Scissors"
+      puts "You tied"
+elsif item2==2 &&  input == "Rock" && item == "Rock"
+      puts "You tied"
+elsif item2==2 && input == "Exit"
+      puts "Goodbye"
+            break
+elsif item2==1 && input == "Rock" && item == "Paper"
+      puts "You lose, try again."
+      computer_input = Amit3[rand(Amit3.length)]
+      input=gets.chomp.strip.capitalize
+    if computer_input=="Rock"
+      case input
+      when "Scissors"
+      puts "You lose, try again."
+      when "Paper"
+      puts "You win, play again."
+      when "Rock"
+      puts "You tied"
+      when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input=="Paper"
+      case input
+      when "Scissors"
+      puts "You win, play again."
+      when "Paper"
+      puts "You tied"
+      when "Rock"
+      puts "You lose, try again."
+            when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input== "Scissors"
+        case input
+        when "Scissors"
+        puts "You tied"
+        when "Paper"
+        puts "You lose, try again."
+        when "Rock"
+        puts "You win, play again."
+              when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+    end
+    end   
+elsif item2==1 &&  input == "Rock" && item == "Scissors"
+      puts "You win, play again."
+      computer_input2=Amit4[rand(Amit4.length)]
+      input=gets.chomp.strip.capitalize
+        if computer_input2=="Rock"
+      case input
+      when "Scissors"
+      puts "You lose, try again."
+      when "Paper"
+      puts "You win, play again."
+      when "Rock"
+      puts "You tied"
+      when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input2=="Paper"
+      case input
+      when "Scissors"
+      puts "You win, play again."
+      when "Paper"
+      puts "You tied"
+      when "Rock"
+      puts "You lose, try again."
+            when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input2== "Scissors"
+        case input
+        when "Scissors"
+        puts "You tied"
+        when "Paper"
+        puts "You lose, try again."
+        when "Rock"
+        puts "You win, play again."
+              when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+    end
+    end   
+elsif item2==1 &&  input == "Scissors" && item == "Rock"
+      puts "You lose, try again"
+      computer_input3 = Amit5[rand(Amit5.length)]
+      input=gets.chomp.strip.capitalize
+              if computer_input3=="Rock"
+      case input
+      when "Scissors"
+      puts "You lose, try again."
+      when "Paper"
+      puts "You win, play again."
+      when "Rock"
+      puts "You tied"
+      when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input3=="Paper"
+      case input
+      when "Scissors"
+      puts "You win, play again."
+      when "Paper"
+      puts "You tied"
+      when "Rock"
+      puts "You lose, try again."
+            when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input3== "Scissors"
+        case input
+        when "Scissors"
+        puts "You tied"
+        when "Paper"
+        puts "You lose, try again."
+        when "Rock"
+        puts "You win, play again."
+              when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+    end
+    end   
+elsif item2==1 &&  input == "Scissors" && item == "Paper"
+      puts "You win, play again."
+      computer_input4=Amit6[rand(Amit6.length)]
+      input=gets.chomp.strip.capitalize
+    if computer_input4=="Rock"
+      case input
+      when "Scissors"
+      puts "You lose, try again."
+      when "Paper"
+      puts "You win, play again."
+      when "Rock"
+      puts "You tied"
+      when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input4=="Paper"
+      case input
+      when "Scissors"
+      puts "You win, play again."
+      when "Paper"
+      puts "You tied"
+      when "Rock"
+      puts "You lose, try again."
+            when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input4== "Scissors"
+        case input
+        when "Scissors"
+        puts "You tied"
+        when "Paper"
+        puts "You lose, try again."
+        when "Rock"
+        puts "You win, play again."
+              when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+    end
+    end  
+elsif item2==1 &&  input == "Paper" && item == "Scissors"
+      puts "You lose, try again"
+      computer_input5=Amit7[rand(Amit7.length)]
+      input=gets.chomp.strip.capitalize
+    if computer_input5=="Rock"
+      case input
+      when "Scissors"
+      puts "You lose, try again."
+      when "Paper"
+      puts "You win, play again."
+      when "Rock"
+      puts "You tied"
+      when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input5=="Paper"
+      case input
+      when "Scissors"
+      puts "You win, play again."
+      when "Paper"
+      puts "You tied"
+      when "Rock"
+      puts "You lose, try again."
+            when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input5== "Scissors"
+        case input
+        when "Scissors"
+        puts "You tied"
+        when "Paper"
+        puts "You lose, try again."
+        when "Rock"
+        puts "You win, play again."
+              when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+    end
+    end  
+elsif item2==1 &&  input == "Paper" && item == "Rock"
+      puts "You win, play again."
+      computer_input6=Amit8[rand(Amit8.length)]
+      input=gets.chomp.strip.capitalize
+    if computer_input6=="Rock"
+      case input
+      when "Scissors"
+      puts "You lose, try again."
+      when "Paper"
+      puts "You win, play again."
+      when "Rock"
+      puts "You tied"
+      when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input6=="Paper"
+      case input
+      when "Scissors"
+      puts "You win, play again."
+      when "Paper"
+      puts "You tied"
+      when "Rock"
+      puts "You lose, try again."
+            when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input6== "Scissors"
+        case input
+        when "Scissors"
+        puts "You tied"
+        when "Paper"
+        puts "You lose, try again."
+        when "Rock"
+        puts "You win, play again."
+              when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+    end
+    end  
+elsif item2==1 &&  input == "Paper" && item == "Paper"
+     puts "You tied"
+           computer_input7=Amit9[rand(Amit9.length)]
+      input=gets.chomp.strip.capitalize
+    if computer_input7=="Rock"
+      case input
+      when "Scissors"
+      puts "You lose, try again."
+      when "Paper"
+      puts "You win, play again."
+      when "Rock"
+      puts "You tied"
+      when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input7=="Paper"
+      case input
+      when "Scissors"
+      puts "You win, play again."
+      when "Paper"
+      puts "You tied"
+      when "Rock"
+      puts "You lose, try again."
+            when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input7== "Scissors"
+        case input
+        when "Scissors"
+        puts "You tied"
+        when "Paper"
+        puts "You lose, try again."
+        when "Rock"
+        puts "You win, play again."
+              when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+    end
+    end  
+elsif item2==1 &&  input == "Scissors" && item == "Scissors"
+      puts "You tied"
+                 computer_input8=Amit10[rand(Amit10.length)]
+      input=gets.chomp.strip.capitalize
+    if computer_input8=="Rock"
+      case input
+      when "Scissors"
+      puts "You lose, try again."
+      when "Paper"
+      puts "You win, play again."
+      when "Rock"
+      puts "You tied"
+      when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input8=="Paper"
+      case input
+      when "Scissors"
+      puts "You win, play again."
+      when "Paper"
+      puts "You tied"
+      when "Rock"
+      puts "You lose, try again."
+            when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input8== "Scissors"
+        case input
+        when "Scissors"
+        puts "You tied"
+        when "Paper"
+        puts "You lose, try again."
+        when "Rock"
+        puts "You win, play again."
+              when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+    end
+    end 
+elsif item2==1 &&  input == "Rock" && item == "Rock"
+      puts "You tied"
+                       computer_input9=Amit11[rand(Amit11.length)]
+      input=gets.chomp.strip.capitalize
+    if computer_input9=="Rock"
+      case input
+      when "Scissors"
+      puts "You lose, try again."
+      when "Paper"
+      puts "You win, play again."
+      when "Rock"
+      puts "You tied"
+      when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input9=="Paper"
+      case input
+      when "Scissors"
+      puts "You win, play again."
+      when "Paper"
+      puts "You tied"
+      when "Rock"
+      puts "You lose, try again."
+            when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+      end
+    elsif computer_input9== "Scissors"
+        case input
+        when "Scissors"
+        puts "You tied"
+        when "Paper"
+        puts "You lose, try again."
+        when "Rock"
+        puts "You win, play again."
+              when "Exit"
+      puts "Goodbye"
+      break
+      else
+          puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly." 
+    end
+    end 
+elsif item2==1 && input == "Exit"
+      puts "Goodbye"
+      break
+else 
+      puts "It appears you have a spelling error. If you want to leave type exit, or you can spell the word correctly."
+end
+end
+     </pre></p>
+     <hr>
+               <hr>
+     <hr>
+     <em><h2 style ="color:blue"> Interests</h2></em>
+     
+         <ul style ="font-family:Sylfaen; color:black">
+            <li>Google Earth</li>
+            <li>Reading, My favorite series are:</li>
+            
+            <ol>
+         <li>Harry Potter</li>
+         <li>The Kane Chronicles</li>
+         <li>The Artemis Fowl series</li>
+         <li>The Secrets of the Immortal Nicholas Flamel</li>
+         </ol>
+         <li>Writing html</li>
+         <li>Family and Friends</li>
+         <ul>
+             <li>I have 4 people in my family.</li>
+             <li>I have a mom, dad, and a sister.</li>
+         </ul>
+         
+     </ul>
+	</body>
+</html>
