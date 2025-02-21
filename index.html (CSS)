@@ -1,0 +1,31 @@
+/* Each color button now displays its digit.
+   Also, the text is styled so it's visible on the background. */
+.color-btn {
+    width: 60%;
+    height: 60%;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    border-radius: 50%;
+    border: 0.15rem solid black;
+    pointer-events: none;
+    color: black;
+    font-weight: bold;
+    -webkit-text-stroke: 1px white;
+    font-size: clamp(2rem, 3vw, 2.5rem);
+}
+
+.hole {
+    width: 3vmin;
+    height: 3vmin;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    border-radius: 50%;
+    border: 0.15rem solid black;
+    background-color: #d2d2dc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: black;
+    -webkit-text-stroke: 1px white;
+} 

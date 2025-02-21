@@ -17,11 +17,11 @@
             padding: 2vh;
         }
 
-        /* When numbers are hidden, force the text color (and text-shadow) to be transparent */
+        /* When numbers are hidden, force the text (and its stroke) to be transparent */
         body.hide-numbers .color-btn,
         body.hide-numbers .hole {
             color: transparent !important;
-            text-shadow: none !important;
+            -webkit-text-stroke: 0px !important;
         }
 
         /* The game container uses percentages for its children.
@@ -96,7 +96,7 @@
         }
 
         /* Each color button now displays its digit.
-           Also, the text is styled so it's visible on the background. */
+           The text is styled to have a black fill with a white border. */
         .color-btn {
             width: 60%;
             height: 60%;
@@ -105,10 +105,9 @@
             border-radius: 50%;
             border: 0.15rem solid black;
             pointer-events: none;
-            color: white;
+            color: black;
             font-weight: bold;
-            text-shadow: 1px 1px 2px black;
-            /* Increase font size for buttonboard numbers (since these buttons are larger) */
+            -webkit-text-stroke: 1px white;
             font-size: clamp(2rem, 3vw, 2.5rem);
         }
 
@@ -143,8 +142,8 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            color: white;
-            text-shadow: 1px 1px 2px black;
+            color: black;
+            -webkit-text-stroke: 1px white;
         }
 
         /* In the Answer Row, the holes display a larger font if needed */
@@ -386,7 +385,7 @@
                     <button class="color-btn" style="background-color: blue">2</button>
                 </div>
                 <div class="button-cell">
-                    <button class="color-btn" style="background-color: rgb(10, 210, 10)">3</button>
+                    <button class="color-btn" style="background-color: rgb(10,210,10)">3</button>
                 </div>
                 <div class="button-cell">
                     <button class="color-btn" style="background-color: yellow">4</button>
@@ -630,6 +629,7 @@
 
         function gameWon() {
             gameActive = false;
+            document.getElementById('undo-button').disabled = true;  // Disable undo after game over
             stats.wins++;
             stats.total++;
             stats.currentStreak++;
@@ -640,9 +640,10 @@
                 alert('Congratulations! You won!');
             }, 100);
         }
-
+ 
         function gameLost() {
             gameActive = false;
+            document.getElementById('undo-button').disabled = true;  // Disable undo after game over
             stats.total++;
             stats.currentStreak = 0;
             updateScoreboard();

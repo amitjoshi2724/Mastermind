@@ -1,0 +1,25 @@
+function gameWon() {
+    gameActive = false;
+    document.getElementById('undo-button').disabled = true;  // Disable undo after game over
+    stats.wins++;
+    stats.total++;
+    stats.currentStreak++;
+    stats.longestStreak = Math.max(stats.longestStreak, stats.currentStreak);
+    updateScoreboard();
+    revealAnswer();
+    setTimeout(() => {
+        alert('Congratulations! You won!');
+    }, 100);
+}
+
+function gameLost() {
+    gameActive = false;
+    document.getElementById('undo-button').disabled = true;  // Disable undo after game over
+    stats.total++;
+    stats.currentStreak = 0;
+    updateScoreboard();
+    revealAnswer();
+    setTimeout(() => {
+        alert('Game Over! The correct sequence is shown above.');
+    }, 100);
+} 
